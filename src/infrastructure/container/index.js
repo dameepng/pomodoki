@@ -6,9 +6,14 @@ import getStatsUseCase from "@/application/sessions/get-stats.usecase.js";
 import getSettingsUseCase from "@/application/settings/get-settings.usecase.js";
 import updateSettingsUseCase from "@/application/settings/update-settings.usecase.js";
 import updateStreakUseCase from "@/application/streaks/update-streak.usecase.js";
+import createTaskUseCase from "@/application/tasks/create-task.usecase.js";
+import deleteTaskUseCase from "@/application/tasks/delete-task.usecase.js";
+import getTasksUseCase from "@/application/tasks/get-tasks.usecase.js";
+import updateTaskUseCase from "@/application/tasks/update-task.usecase.js";
 import sessionRepository from "@/infrastructure/repositories/session.repository.js";
 import settingsRepository from "@/infrastructure/repositories/settings.repository.js";
 import streakRepository from "@/infrastructure/repositories/streak.repository.js";
+import taskRepository from "@/infrastructure/repositories/task.repository.js";
 import userRepository from "@/infrastructure/repositories/user.repository.js";
 import hashService from "@/infrastructure/services/hash.service.js";
 import jwtService from "@/infrastructure/services/jwt.service.js";
@@ -19,6 +24,7 @@ export {
   settingsRepository,
   sessionRepository,
   streakRepository,
+  taskRepository,
   userRepository,
   registerUseCase,
   loginUseCase,
@@ -28,6 +34,10 @@ export {
   createSessionUseCase,
   getStatsUseCase,
   updateStreakUseCase,
+  createTaskUseCase,
+  getTasksUseCase,
+  updateTaskUseCase,
+  deleteTaskUseCase,
 };
 
 export default {
@@ -36,6 +46,7 @@ export default {
   settingsRepository,
   sessionRepository,
   streakRepository,
+  taskRepository,
   userRepository,
   registerUseCase,
   loginUseCase,
@@ -45,4 +56,8 @@ export default {
   createSessionUseCase,
   getStatsUseCase,
   updateStreakUseCase,
+  createTaskUseCase,
+  getTasksUseCase,
+  updateTaskUseCase,
+  deleteTaskUseCase,
 };

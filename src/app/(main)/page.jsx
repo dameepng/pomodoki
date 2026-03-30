@@ -1,6 +1,7 @@
 "use client";
 
 import Timer from "@/presentation/components/timer/Timer.jsx";
+import TaskList from "@/presentation/components/tasks/TaskList.jsx";
 import Card from "@/presentation/components/ui/Card.jsx";
 
 export default function MainPage() {
@@ -20,10 +21,7 @@ export default function MainPage() {
           <Timer />
         </Card>
 
-        <Card className="text-center">
-          <h2 className="text-lg font-semibold text-slate-900">Tasks</h2>
-          <p className="mt-2 text-sm text-slate-500">Tasks coming soon</p>
-        </Card>
+        <TaskList />
 
         <Card className="text-center">
           <h2 className="text-lg font-semibold text-slate-900">Ambient</h2>

@@ -268,12 +268,14 @@ COOKIE_NAME = 'pomodoki_token' JWT_EXPIRY = '7d' BCRYPT_ROUNDS = 10 LONG_BREAK_I
 - Settings API route
 - Main page layout
 - UI primitives (Button, Card)
-### Phase 4 — Tasks (TODO)
+### Phase 4 — Tasks ✅
 - Task repository
 - Task use cases (CRUD)
 - Task API routes
 - Task components (TaskList, TaskItem, TaskForm)
+- UI primitives (Input, Modal)
 - useTasks hook
+- Integrasi ke main page
 ### Phase 5 — Gamification (TODO)
 - Pixel pet components
 - Pet state logic (based on streak + timer)
