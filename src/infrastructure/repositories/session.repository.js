@@ -1,7 +1,7 @@
-import { and, eq, gte, lte, sql } from "drizzle-orm";
+import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 
 import db from "@/infrastructure/database/drizzle.js";
-import { pomodoroSessions } from "@/infrastructure/database/schema.js";
+import { pomodoroSessions, tasks } from "@/infrastructure/database/schema.js";
 
 const buildSessionFilters = (userId, options = {}) => {
   const conditions = [eq(pomodoroSessions.userId, userId)];
@@ -103,6 +103,47 @@ export class SessionRepository {
       date: String(row.date),
       totalDuration: Number(row.totalDuration ?? 0),
     }));
+  }
+
+  async getMostProductiveDay(userId) {
+    const day = sql`date(${pomodoroSessions.completedAt})`;
+    const totalDuration = sql`coalesce(sum(${pomodoroSessions.duration}), 0)`;
+
+    const [row] = await db
+      .select({
+        date: day,
+        totalDuration,
+      })
+      .from(pomodoroSessions)
+      .where(
+        and(
+          eq(pomodoroSessions.userId, userId),
+          eq(pomodoroSessions.type, "focus"),
+        ),
+      )
+      .groupBy(day)
+      .orderBy(desc(totalDuration), day)
+      .limit(1);
+
+    if (!row) {
+      return null;
+    }
+
+    return {
+      date: String(row.date),
+      totalDuration: Number(row.totalDuration ?? 0),
+    };
+  }
+
+  async getAveragePomodoroPerTask(userId) {
+    const [result] = await db
+      .select({
+        averagePomodoroCount: sql`coalesce(avg(${tasks.pomodoroCount}), 0)`,
+      })
+      .from(tasks)
+      .where(and(eq(tasks.userId, userId), eq(tasks.completed, true)));
+
+    return Number(Number(result?.averagePomodoroCount ?? 0).toFixed(1));
   }
 }
 

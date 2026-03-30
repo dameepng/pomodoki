@@ -59,12 +59,13 @@ export class GetStatsUseCase {
     const period = resolvePeriod(options.period || PERIODS.ALL);
     const from = getFromDate(period);
 
-    const [totalFocusTime, sessionCount, dailyFocusTime, streak] =
+    const [totalFocusTime, sessionCount, dailyFocusTime, streak, mostProductiveDay] =
       await Promise.all([
         sessionRepository.getTotalFocusTime(userId, { from }),
         sessionRepository.getSessionCountByType(userId, { from }),
         sessionRepository.getDailyFocusTime(userId, { from }),
         streakRepository.findByUserId(userId),
+        sessionRepository.getMostProductiveDay(userId),
       ]);
 
     return {
@@ -73,6 +74,7 @@ export class GetStatsUseCase {
       dailyFocusTime,
       currentStreak: streak?.currentStreak ?? 0,
       longestStreak: streak?.longestStreak ?? 0,
+      mostProductiveDay,
       period,
     };
   }
