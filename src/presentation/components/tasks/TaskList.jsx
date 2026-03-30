@@ -1,0 +1,84 @@
+"use client";
+
+import { useState } from "react";
+
+import Card from "@/presentation/components/ui/Card.jsx";
+import useTasks from "@/presentation/hooks/useTasks.js";
+
+import TaskForm from "./TaskForm.jsx";
+import TaskItem from "./TaskItem.jsx";
+
+export default function TaskList() {
+  const { tasks, isLoading, createTask, toggleComplete, deleteTask } =
+    useTasks();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCreate = async (title) => {
+    setIsSubmitting(true);
+
+    try {
+      return await createTask(title);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleToggle = async (taskId) => {
+    try {
+      await toggleComplete(taskId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSelect = () => {};
+  const incompleteTasks = tasks.filter((task) => !task.completed);
+  const completedTasks = tasks.filter((task) => task.completed);
+  const sortedTasks = [...incompleteTasks, ...completedTasks];
+
+  return (
+    <Card className="space-y-5">
+      <div className="space-y-1">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+          Tasks
+        </h2>
+        <p className="text-sm text-slate-500">
+          Pilih fokus berikutnya dan tandai saat selesai.
+        </p>
+      </div>
+
+      <TaskForm onSubmit={handleCreate} isLoading={isSubmitting} />
+
+      {isLoading ? <p className="text-sm text-slate-500">Loading tasks...</p> : null}
+
+      {!isLoading && sortedTasks.length === 0 ? (
+        <p className="text-sm text-slate-500">No tasks yet. Add one above.</p>
+      ) : null}
+
+      {!isLoading && sortedTasks.length > 0 ? (
+        <div className="space-y-3">
+          {sortedTasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggleComplete={handleToggle}
+              onDelete={handleDelete}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+      ) : null}
+    </Card>
+  );
+}
