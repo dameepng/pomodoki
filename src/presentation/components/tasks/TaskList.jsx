@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import Card from "@/presentation/components/ui/Card.jsx";
+import EmptyState from "@/presentation/components/ui/EmptyState.jsx";
+import Spinner from "@/presentation/components/ui/Spinner.jsx";
 import useTasks from "@/presentation/hooks/useTasks.js";
 
 import TaskForm from "./TaskForm.jsx";
@@ -60,10 +62,18 @@ export default function TaskList() {
 
       <TaskForm onSubmit={handleCreate} isLoading={isSubmitting} />
 
-      {isLoading ? <p className="text-sm text-slate-500">Loading tasks...</p> : null}
+      {isLoading ? (
+        <div className="flex justify-center py-8 text-red-500">
+          <Spinner size="md" />
+        </div>
+      ) : null}
 
       {!isLoading && sortedTasks.length === 0 ? (
-        <p className="text-sm text-slate-500">No tasks yet. Add one above.</p>
+        <EmptyState
+          icon="📝"
+          title="No tasks yet"
+          description="Add a task above to get started"
+        />
       ) : null}
 
       {!isLoading && sortedTasks.length > 0 ? (

@@ -6,6 +6,7 @@ import StatsOverview from "@/presentation/components/stats/StatsOverview.jsx";
 import ProductivityChart from "@/presentation/components/stats/ProductivityChart.jsx";
 import StreakDisplay from "@/presentation/components/stats/StreakDisplay.jsx";
 import Button from "@/presentation/components/ui/Button.jsx";
+import Spinner from "@/presentation/components/ui/Spinner.jsx";
 import useStats from "@/presentation/hooks/useStats.js";
 
 const PERIOD_OPTIONS = [
@@ -48,7 +49,9 @@ export default function StatsPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-slate-500">Loading statistics...</p>
+        <div className="flex justify-center py-4 text-red-500">
+          <Spinner size="md" />
+        </div>
       ) : null}
 
       <StreakDisplay
