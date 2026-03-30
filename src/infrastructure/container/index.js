@@ -65,3 +65,7 @@ export default {
 // Phase 5 - Gamification
 // No new services or use cases
 // Pet logic handled via pet-helpers.js (pure functions)
+
+// Phase 6 - Ambient
+// No new services or use cases
+// Ambient logic handled via ambient-helpers.js and useAmbient.js

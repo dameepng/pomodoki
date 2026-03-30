@@ -1,6 +1,7 @@
 "use client";
 
 import Timer from "@/presentation/components/timer/Timer.jsx";
+import AmbientPlayer from "@/presentation/components/ambient/AmbientPlayer.jsx";
 import PixelPet from "@/presentation/components/pet/PixelPet.jsx";
 import TaskList from "@/presentation/components/tasks/TaskList.jsx";
 import Card from "@/presentation/components/ui/Card.jsx";
@@ -26,10 +27,7 @@ export default function MainPage() {
 
         <TaskList />
 
-        <Card className="text-center">
-          <h2 className="text-lg font-semibold text-slate-900">Ambient</h2>
-          <p className="mt-2 text-sm text-slate-500">Ambient coming soon</p>
-        </Card>
+        <AmbientPlayer />
       </div>
     </div>
   );
