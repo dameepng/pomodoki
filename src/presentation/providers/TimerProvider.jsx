@@ -28,6 +28,61 @@ const getDurationByMode = (mode, settings) => {
   return settings.focusDuration;
 };
 
+async function requestNotificationPermission() {
+  if (typeof window === "undefined" || !("Notification" in window)) {
+    return;
+  }
+
+  if (Notification.permission === "default") {
+    await Notification.requestPermission();
+  }
+}
+
+function showNotification(title, body) {
+  if (typeof window === "undefined" || !("Notification" in window)) {
+    return;
+  }
+
+  if (Notification.permission !== "granted") {
+    return;
+  }
+
+  new Notification(title, { body, icon: "/favicon.ico" });
+}
+
+function playCompletionSound() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const AudioContextClass =
+    window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    return;
+  }
+
+  const audioContext = new AudioContextClass();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+
+  oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+  oscillator.type = "sine";
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  oscillator.onended = () => {
+    oscillator.disconnect();
+    gainNode.disconnect();
+    audioContext.close();
+  };
+
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + 0.3);
+}
+
 export default function TimerProvider({ children }) {
   const [mode, setModeState] = useState("focus");
   const [timeLeft, setTimeLeft] = useState(1500);
@@ -73,6 +128,7 @@ export default function TimerProvider({ children }) {
       setTimeLeft(DEFAULT_SETTINGS.focusDuration);
     };
 
+    void requestNotificationPermission();
     loadSettings().finally(() => {
       if (isMounted) {
         setIsLoadingSettings(false);
@@ -125,6 +181,25 @@ export default function TimerProvider({ children }) {
         }),
       });
     } catch {
+    }
+
+    try {
+      playCompletionSound();
+    } catch {
+    }
+
+    if (mode === "focus") {
+      showNotification(
+        "Focus session done! 🍅",
+        "Time for a break. Well done!",
+      );
+    }
+
+    if (mode === "short_break" || mode === "long_break") {
+      showNotification(
+        "Break time over! ⏰",
+        "Ready to focus again?",
+      );
     }
 
     if (mode === "focus") {
