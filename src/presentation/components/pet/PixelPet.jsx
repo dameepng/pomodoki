@@ -77,7 +77,7 @@ export default function PixelPet() {
     isRunning,
     mode,
   });
-  const imagePath = getPetImagePath(PET_TYPE, petState);
+  const imagePath = getPetImagePath(PET_TYPE, petState).replace(".png", ".svg");
   const [imageSrc, setImageSrc] = useState(imagePath);
 
   useEffect(() => {
