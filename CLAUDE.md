@@ -258,7 +258,7 @@ COOKIE_NAME = 'pomodoki_token' JWT_EXPIRY = '7d' BCRYPT_ROUNDS = 10 LONG_BREAK_I
 - Login/Register pages
 - AuthProvider + useAuth hook
 - Dependency container
-### Phase 3 — Core Timer (TODO)
+### Phase 3 — Core Timer ✅
 - Settings repository + use cases
 - Session repository
 - Streak repository + use case
@@ -267,6 +267,7 @@ COOKIE_NAME = 'pomodoki_token' JWT_EXPIRY = '7d' BCRYPT_ROUNDS = 10 LONG_BREAK_I
 - Session API route
 - Settings API route
 - Main page layout
+- UI primitives (Button, Card)
 ### Phase 4 — Tasks (TODO)
 - Task repository
 - Task use cases (CRUD)
