@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import AIBreakdown from "@/presentation/components/tasks/AIBreakdown.jsx";
 import Button from "@/presentation/components/ui/Button.jsx";
 import useTimer from "@/presentation/hooks/useTimer.js";
 
@@ -67,6 +68,10 @@ export default function TaskItem({
       >
         Focus
       </Button>
+
+      {!task.completed ? (
+        <AIBreakdown taskTitle={task.title} onComplete={() => {}} />
+      ) : null}
 
       <Button
         type="button"

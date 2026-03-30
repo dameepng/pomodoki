@@ -289,13 +289,14 @@ COOKIE_NAME = 'pomodoki_token' JWT_EXPIRY = '7d' BCRYPT_ROUNDS = 10 LONG_BREAK_I
 - Placeholder public/sounds/ folder
 - Integrasi ke main page
 - Settings page (/settings)
-### Phase 7 — AI & Stats (TODO)
-- OpenAI service
+### Phase 7 — AI & Stats ✅
+- OpenAI service (native fetch, gpt-4o-mini)
 - AI breakdown use case + API route
-- AIBreakdown component
-- Stats use case
-- Stats page + components (StatsOverview, StreakDisplay, Chart)
+- AIBreakdown component dengan modal
+- Stats page (/stats) dengan period selector
+- StatsOverview, StreakDisplay, ProductivityChart components
 - useStats hook
+- Integrasi AIBreakdown ke TaskItem
 ### Phase 8 — Polish (TODO)
 - Error handling UI
 - Loading states

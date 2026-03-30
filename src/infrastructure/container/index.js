@@ -6,6 +6,7 @@ import getStatsUseCase from "@/application/sessions/get-stats.usecase.js";
 import getSettingsUseCase from "@/application/settings/get-settings.usecase.js";
 import updateSettingsUseCase from "@/application/settings/update-settings.usecase.js";
 import updateStreakUseCase from "@/application/streaks/update-streak.usecase.js";
+import breakdownTaskUseCase from "@/application/ai/breakdown-task.usecase.js";
 import createTaskUseCase from "@/application/tasks/create-task.usecase.js";
 import deleteTaskUseCase from "@/application/tasks/delete-task.usecase.js";
 import getTasksUseCase from "@/application/tasks/get-tasks.usecase.js";
@@ -17,10 +18,12 @@ import taskRepository from "@/infrastructure/repositories/task.repository.js";
 import userRepository from "@/infrastructure/repositories/user.repository.js";
 import hashService from "@/infrastructure/services/hash.service.js";
 import jwtService from "@/infrastructure/services/jwt.service.js";
+import openaiService from "@/infrastructure/services/openai.service.js";
 
 export {
   hashService,
   jwtService,
+  openaiService,
   settingsRepository,
   sessionRepository,
   streakRepository,
@@ -34,6 +37,7 @@ export {
   createSessionUseCase,
   getStatsUseCase,
   updateStreakUseCase,
+  breakdownTaskUseCase,
   createTaskUseCase,
   getTasksUseCase,
   updateTaskUseCase,
@@ -43,6 +47,7 @@ export {
 export default {
   hashService,
   jwtService,
+  openaiService,
   settingsRepository,
   sessionRepository,
   streakRepository,
@@ -56,6 +61,7 @@ export default {
   createSessionUseCase,
   getStatsUseCase,
   updateStreakUseCase,
+  breakdownTaskUseCase,
   createTaskUseCase,
   getTasksUseCase,
   updateTaskUseCase,
@@ -69,3 +75,5 @@ export default {
 // Phase 6 - Ambient
 // No new services or use cases
 // Ambient logic handled via ambient-helpers.js and useAmbient.js
+
+// Phase 7 - AI & Stats
