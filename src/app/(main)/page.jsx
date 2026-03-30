@@ -1,6 +1,7 @@
 "use client";
 
 import Timer from "@/presentation/components/timer/Timer.jsx";
+import PixelPet from "@/presentation/components/pet/PixelPet.jsx";
 import TaskList from "@/presentation/components/tasks/TaskList.jsx";
 import Card from "@/presentation/components/ui/Card.jsx";
 
@@ -20,6 +21,8 @@ export default function MainPage() {
         <Card className="overflow-hidden">
           <Timer />
         </Card>
+
+        <PixelPet />
 
         <TaskList />
 

@@ -276,9 +276,12 @@ COOKIE_NAME = 'pomodoki_token' JWT_EXPIRY = '7d' BCRYPT_ROUNDS = 10 LONG_BREAK_I
 - UI primitives (Input, Modal)
 - useTasks hook
 - Integrasi ke main page
-### Phase 5 — Gamification (TODO)
-- Pixel pet components
-- Pet state logic (based on streak + timer)
+### Phase 5 — Gamification ✅
+- Pet state logic (pet-helpers.js, pure functions)
+- PixelPet component dengan streak integration
+- PetStatus component dengan dynamic messages
+- Placeholder SVG images (16 files)
+- Integrasi ke main page
 ### Phase 6 — Ambient (TODO)
 - Audio files (placeholder atau real)
 - Ambient components (AmbientPlayer, SoundSelector, VolumeControl)
