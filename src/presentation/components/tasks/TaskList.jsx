@@ -5,12 +5,14 @@ import { useState } from "react";
 import Card from "@/presentation/components/ui/Card.jsx";
 import EmptyState from "@/presentation/components/ui/EmptyState.jsx";
 import Spinner from "@/presentation/components/ui/Spinner.jsx";
+import { useToast } from "@/presentation/components/ui/Toast.jsx";
 import useTasks from "@/presentation/hooks/useTasks.js";
 
 import TaskForm from "./TaskForm.jsx";
 import TaskItem from "./TaskItem.jsx";
 
 export default function TaskList() {
+  const { addToast } = useToast();
   const { tasks, isLoading, createTask, toggleComplete, deleteTask } =
     useTasks();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,9 +21,14 @@ export default function TaskList() {
     setIsSubmitting(true);
 
     try {
-      return await createTask(title);
+      const task = await createTask(title);
+      addToast({ message: "Task added!", type: "success" });
+      return task;
     } catch (error) {
-      console.error(error);
+      addToast({
+        message: error.message || "Failed to add task",
+        type: "error",
+      });
       throw error;
     } finally {
       setIsSubmitting(false);
@@ -31,16 +38,15 @@ export default function TaskList() {
   const handleToggle = async (taskId) => {
     try {
       await toggleComplete(taskId);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch {}
   };
 
   const handleDelete = async (taskId) => {
     try {
       await deleteTask(taskId);
+      addToast({ message: "Task deleted", type: "success" });
     } catch (error) {
-      console.error(error);
+      addToast({ message: "Failed to delete task", type: "error" });
     }
   };
 

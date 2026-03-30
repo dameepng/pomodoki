@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Button from "@/presentation/components/ui/Button.jsx";
 import Modal from "@/presentation/components/ui/Modal.jsx";
+import { useToast } from "@/presentation/components/ui/Toast.jsx";
 import useTasks from "@/presentation/hooks/useTasks.js";
 
 async function getErrorMessage(response, fallbackMessage) {
@@ -43,6 +44,7 @@ function LoadingState({ message }) {
 }
 
 export default function AIBreakdown({ taskTitle, onComplete }) {
+  const { addToast } = useToast();
   const { createTask } = useTasks();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -91,12 +93,17 @@ export default function AIBreakdown({ taskTitle, onComplete }) {
       setIsModalOpen(false);
       setSubtasks([]);
       setHasGenerated(false);
+      addToast({
+        message: `${subtasks.length} tasks added!`,
+        type: "success",
+      });
 
       if (onComplete) {
         onComplete();
       }
     } catch (addError) {
       setError(addError.message || "Failed to add subtasks");
+      addToast({ message: "Failed to add tasks", type: "error" });
     } finally {
       setIsLoading(false);
     }

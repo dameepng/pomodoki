@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Button from "@/presentation/components/ui/Button.jsx";
 import Card from "@/presentation/components/ui/Card.jsx";
 import Input from "@/presentation/components/ui/Input.jsx";
+import { useToast } from "@/presentation/components/ui/Toast.jsx";
 
 const DEFAULT_FORM_SETTINGS = {
   focusDuration: "25",
@@ -46,11 +47,10 @@ async function parseJsonResponse(response) {
 }
 
 export default function SettingsPage() {
+  const { addToast } = useToast();
   const [settings, setSettings] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -69,7 +69,10 @@ export default function SettingsPage() {
         }
       } catch (loadError) {
         if (isMounted) {
-          setError(loadError.message || "Failed to load settings");
+          addToast({
+            message: loadError.message || "Failed to load settings",
+            type: "error",
+          });
           setSettings(DEFAULT_FORM_SETTINGS);
         }
       } finally {
@@ -84,21 +87,7 @@ export default function SettingsPage() {
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  useEffect(() => {
-    if (!successMessage) {
-      return undefined;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setSuccessMessage(null);
-    }, 3000);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [successMessage]);
+  }, [addToast]);
 
   const handleFieldChange = (field) => (event) => {
     const { value } = event.target;
@@ -117,8 +106,6 @@ export default function SettingsPage() {
     }
 
     setIsSaving(true);
-    setError(null);
-    setSuccessMessage(null);
 
     try {
       const payload = {
@@ -143,9 +130,12 @@ export default function SettingsPage() {
       }
 
       setSettings(mapSettingsToForm(data.settings));
-      setSuccessMessage("Settings saved!");
+      addToast({ message: "Settings saved!", type: "success" });
     } catch (saveError) {
-      setError(saveError.message || "Failed to save settings");
+      addToast({
+        message: saveError.message || "Failed to save settings",
+        type: "error",
+      });
     } finally {
       setIsSaving(false);
     }
@@ -242,18 +232,6 @@ export default function SettingsPage() {
               </select>
             </label>
           </div>
-
-          {error ? (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-              {error}
-            </p>
-          ) : null}
-
-          {successMessage ? (
-            <p className="rounded-xl bg-green-50 px-4 py-3 text-sm text-green-700">
-              {successMessage}
-            </p>
-          ) : null}
 
           <div className="flex justify-end">
             <Button type="submit" isLoading={isSaving}>
