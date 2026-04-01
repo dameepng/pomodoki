@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import Card from "@/presentation/components/ui/Card.jsx";
 import EmptyState from "@/presentation/components/ui/EmptyState.jsx";
 import Spinner from "@/presentation/components/ui/Spinner.jsx";
 import { useToast } from "@/presentation/components/ui/Toast.jsx";
@@ -56,20 +55,23 @@ export default function TaskList() {
   const sortedTasks = [...incompleteTasks, ...completedTasks];
 
   return (
-    <Card className="space-y-5">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+    <div className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-6 transition-colors duration-200">
+      <div className="space-y-1 mb-4">
+        <p className="text-[10px] font-bold tracking-[3px] uppercase text-[var(--text-muted)] mb-4">
+          Task Queue
+        </p>
+        <h2 className="pt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)]">
           Tasks
         </h2>
-        <p className="text-sm text-slate-500">
-          Pilih fokus berikutnya dan tandai saat selesai.
+        <p className="text-sm text-[var(--text-secondary)] mb-4">
+          Capture your next step and keep unfinished work visible.
         </p>
       </div>
 
       <TaskForm onSubmit={handleCreate} isLoading={isSubmitting} />
 
       {isLoading ? (
-        <div className="flex justify-center py-8 text-red-500">
+        <div className="flex justify-center py-8 text-[#E85D3F]">
           <Spinner size="md" />
         </div>
       ) : null}
@@ -83,7 +85,7 @@ export default function TaskList() {
       ) : null}
 
       {!isLoading && sortedTasks.length > 0 ? (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-2 mt-4">
           {sortedTasks.map((task) => (
             <TaskItem
               key={task.id}
@@ -95,6 +97,6 @@ export default function TaskList() {
           ))}
         </div>
       ) : null}
-    </Card>
+    </div>
   );
 }

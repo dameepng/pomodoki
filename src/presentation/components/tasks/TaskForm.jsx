@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import Button from "@/presentation/components/ui/Button.jsx";
 import Input from "@/presentation/components/ui/Input.jsx";
 
 export default function TaskForm({
@@ -29,19 +28,24 @@ export default function TaskForm({
   };
 
   return (
-    <form className="flex flex-col gap-3 sm:flex-row" onSubmit={handleSubmit}>
-      <div className="flex-1">
-        <Input
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          placeholder={placeholder}
-          aria-label="Task title"
-        />
-      </div>
+    <form
+      className="flex flex-col gap-3"
+      onSubmit={handleSubmit}
+    >
+      <Input
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        placeholder={placeholder}
+        aria-label="Task title"
+      />
 
-      <Button type="submit" isLoading={isLoading} disabled={isLoading}>
-        Add Task
-      </Button>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="w-full mt-2 py-3 rounded-xl text-sm font-semibold text-white bg-[#E85D3F] hover:bg-[#d4512f] transition-colors disabled:opacity-60"
+      >
+        {isLoading ? "Adding..." : "Add Task"}
+      </button>
     </form>
   );
 }

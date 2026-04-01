@@ -40,12 +40,12 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
+      <div className="rounded-3xl bg-[var(--bg-card)] p-8 shadow-card border border-[var(--border-default)] transition-colors duration-200">
         <div className="mb-8 space-y-2 text-center">
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-3xl font-semibold tracking-tight text-[var(--text-primary)]">
             Masuk ke Pomodoki
           </h1>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[var(--text-secondary)]">
             Lanjutkan fokusmu dengan akun yang sudah ada.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function LoginPage() {
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label
-              className="text-sm font-medium text-slate-700"
+              className="text-sm font-medium text-[var(--text-secondary)]"
               htmlFor="username"
             >
               Username
@@ -63,7 +63,7 @@ export default function LoginPage() {
               type="text"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+              className="w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-input)] px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--border-subtle)] focus:ring-2 focus:ring-[var(--border-subtle)]"
               placeholder="Masukkan username"
               autoComplete="username"
             />
@@ -71,7 +71,7 @@ export default function LoginPage() {
 
           <div className="space-y-2">
             <label
-              className="text-sm font-medium text-slate-700"
+              className="text-sm font-medium text-[var(--text-secondary)]"
               htmlFor="password"
             >
               Password
@@ -81,7 +81,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200"
+              className="w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-input)] px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--border-subtle)] focus:ring-2 focus:ring-[var(--border-subtle)]"
               placeholder="Masukkan password"
               autoComplete="current-password"
             />
@@ -96,15 +96,15 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-xl bg-[#E85D3F] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#d4512f] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isLoading ? "Memproses..." : "Login"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-500">
+        <p className="mt-6 text-center text-sm text-[var(--text-secondary)]">
           Belum punya akun?{" "}
-          <Link className="font-semibold text-slate-900" href="/register">
+          <Link className="font-semibold text-[var(--text-primary)]" href="/register">
             Daftar
           </Link>
         </p>

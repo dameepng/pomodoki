@@ -8,6 +8,11 @@ const authRoutes = ["/login", "/register"];
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get(COOKIE_NAME)?.value;
   const payload = token ? await jwtService.verifyToken(token) : null;
   const isAuthenticated = Boolean(payload);

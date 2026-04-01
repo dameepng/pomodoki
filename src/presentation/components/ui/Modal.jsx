@@ -7,23 +7,23 @@ export default function Modal({ isOpen, onClose, title, children }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-sm"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200"
+        className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-6 w-full max-w-md shadow-card transition-colors duration-200"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label={title}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
-          <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
+          <h2 className="font-display text-xl font-bold text-[var(--text-primary)]">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg px-2 py-1 text-lg leading-none text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+            className="rounded-full bg-[var(--bg-elevated)] px-2.5 py-1.5 text-lg leading-none text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
             aria-label="Close modal"
           >
             ×

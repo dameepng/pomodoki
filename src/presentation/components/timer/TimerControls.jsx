@@ -2,23 +2,33 @@
 
 import useTimer from "@/presentation/hooks/useTimer.js";
 
-const MODE_BUTTON_CLASSES = {
-  focus: "bg-red-500 hover:bg-red-600",
-  short_break: "bg-green-500 hover:bg-green-600",
-  long_break: "bg-blue-500 hover:bg-blue-600",
+const MODE_COLORS = {
+  focus: "#E85D3F",
+  short_break: "#4ECCA3",
+  long_break: "#6C8EBF",
+};
+
+const MODE_SHADOWS = {
+  focus: "0 0 32px rgba(232,93,63,0.3)",
+  short_break: "0 0 32px rgba(78,204,163,0.3)",
+  long_break: "0 0 32px rgba(108,142,191,0.3)",
 };
 
 export default function TimerControls() {
   const { isRunning, mode, start, pause, reset, skip } = useTimer();
-  const primaryButtonClass =
-    MODE_BUTTON_CLASSES[mode] || MODE_BUTTON_CLASSES.focus;
+  const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
+  const glowShadow = MODE_SHADOWS[mode] || MODE_SHADOWS.focus;
 
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex flex-wrap items-center justify-center gap-3">
       <button
         type="button"
         onClick={isRunning ? pause : start}
-        className={`min-w-36 rounded-2xl px-6 py-3 text-base font-semibold text-white shadow-sm transition ${primaryButtonClass}`}
+        className="px-12 py-3.5 rounded-full font-semibold text-sm text-white transition-all hover:-translate-y-0.5 active:translate-y-0"
+        style={{
+          backgroundColor: accentColor,
+          boxShadow: glowShadow,
+        }}
       >
         {isRunning ? "Pause" : "Start"}
       </button>
@@ -26,7 +36,7 @@ export default function TimerControls() {
       <button
         type="button"
         onClick={reset}
-        className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+        className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-muted)] bg-[var(--bg-elevated)] hover:text-[var(--text-secondary)] transition-colors border border-[var(--border-default)]"
       >
         Reset
       </button>
@@ -34,7 +44,7 @@ export default function TimerControls() {
       <button
         type="button"
         onClick={skip}
-        className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+        className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-muted)] bg-[var(--bg-elevated)] hover:text-[var(--text-secondary)] transition-colors border border-[var(--border-default)]"
       >
         Skip
       </button>

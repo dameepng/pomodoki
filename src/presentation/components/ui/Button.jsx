@@ -1,19 +1,20 @@
 "use client";
 
+import { cn } from "@/lib/utils.js";
+
 const VARIANT_CLASSES = {
-  primary: "bg-red-500 text-white hover:bg-red-600",
+  primary:
+    "bg-[#E85D3F] text-white hover:-translate-y-0.5 hover:text-white",
   secondary:
-    "border border-slate-300 bg-transparent text-slate-800 hover:bg-slate-50",
-  ghost: "bg-transparent text-slate-700 hover:bg-slate-100",
+    "border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:-translate-y-0.5 hover:bg-[var(--bg-card)] hover:text-[var(--text-primary)]",
+  ghost: "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
 };
 
 const SIZE_CLASSES = {
-  sm: "px-3 py-2 text-sm",
-  md: "px-4 py-2.5 text-base",
-  lg: "px-6 py-3 text-lg",
+  sm: "px-5 py-2.5 text-sm",
+  md: "px-6 py-2.5 text-sm",
+  lg: "px-10 py-3.5 text-base",
 };
-
-const joinClasses = (...classes) => classes.filter(Boolean).join(" ");
 
 function Spinner() {
   return (
@@ -57,8 +58,8 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={isDisabled}
-      className={joinClasses(
-        "inline-flex items-center justify-center gap-2 rounded-2xl font-medium transition focus:outline-none focus:ring-2 focus:ring-red-200",
+      className={cn(
+        "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#E85D3F]/20 active:translate-y-px",
         VARIANT_CLASSES[variant] || VARIANT_CLASSES.primary,
         SIZE_CLASSES[size] || SIZE_CLASSES.md,
         isDisabled && "cursor-not-allowed opacity-60",

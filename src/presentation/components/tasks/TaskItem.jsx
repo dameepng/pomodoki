@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
+import { cn } from "@/lib/utils.js";
 import AIBreakdown from "@/presentation/components/tasks/AIBreakdown.jsx";
-import Button from "@/presentation/components/ui/Button.jsx";
 import useTimer from "@/presentation/hooks/useTimer.js";
 
 export default function TaskItem({
@@ -32,58 +32,52 @@ export default function TaskItem({
 
   return (
     <div
-      className={`flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 transition hover:border-slate-300 hover:shadow-sm ${
-        task.completed ? "opacity-60" : ""
-      }`}
+      className={cn(
+        "flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--bg-elevated)] transition-colors group cursor-pointer",
+        task.completed && "opacity-60",
+      )}
+      onClick={handleSelect}
     >
       <input
         type="checkbox"
         checked={task.completed}
-        onChange={() => onToggleComplete(task.id)}
-        className="h-4 w-4 rounded border-slate-300 text-red-500 focus:ring-red-200"
+        onChange={(e) => {
+          e.stopPropagation();
+          onToggleComplete(task.id);
+        }}
+        className="w-5 h-5 rounded-md border-2 border-[var(--border-subtle)] flex-shrink-0 bg-transparent accent-[#E85D3F]"
+        style={{
+          accentColor: "#E85D3F",
+        }}
         aria-label={`Toggle task ${task.title}`}
       />
 
-      <div className="min-w-0 flex-1">
-        <p
-          className={`truncate text-sm font-medium text-slate-900 ${
-            task.completed ? "line-through" : ""
-          }`}
+      <p
+        className={cn(
+          "text-sm font-medium text-[var(--text-secondary)] flex-1",
+          task.completed && "text-[var(--text-muted)] line-through",
+        )}
+      >
+        {task.title}
+      </p>
+
+      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        {!task.completed ? (
+          <AIBreakdown taskTitle={task.title} onComplete={() => {}} />
+        ) : null}
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete();
+          }}
+          disabled={isDeleting}
+          className="px-3 py-1 rounded-lg text-xs text-[var(--text-muted)] hover:text-red-400 transition-colors"
         >
-          {task.title}
-        </p>
+          {isDeleting ? "..." : "✕"}
+        </button>
       </div>
-
-      {task.pomodoroCount > 0 ? (
-        <span className="whitespace-nowrap rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-600">
-          {`🍅 × ${task.pomodoroCount}`}
-        </span>
-      ) : null}
-
-      <Button
-        type="button"
-        variant="secondary"
-        size="sm"
-        onClick={handleSelect}
-      >
-        Focus
-      </Button>
-
-      {!task.completed ? (
-        <AIBreakdown taskTitle={task.title} onComplete={() => {}} />
-      ) : null}
-
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={handleDelete}
-        isLoading={isDeleting}
-        disabled={isDeleting}
-        className="px-3 text-slate-500 hover:text-red-500"
-      >
-        {!isDeleting ? "×" : "Deleting"}
-      </Button>
     </div>
   );
 }

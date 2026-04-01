@@ -17,9 +17,9 @@ async function getErrorMessage(response, fallbackMessage) {
 
 function LoadingState({ message }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+    <div className="flex items-center gap-3 rounded-xl bg-[var(--bg-input)] px-4 py-3 text-sm text-[var(--text-secondary)]">
       <svg
-        className="h-4 w-4 animate-spin text-red-500"
+        className="h-4 w-4 animate-spin text-[#E85D3F]"
         viewBox="0 0 24 24"
         aria-hidden="true"
       >
@@ -119,7 +119,12 @@ export default function AIBreakdown({ taskTitle, onComplete }) {
 
   return (
     <>
-      <Button size="sm" variant="ghost" onClick={handleOpen}>
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={handleOpen}
+        className="bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+      >
         ✨ AI Breakdown
       </Button>
 
@@ -134,7 +139,7 @@ export default function AIBreakdown({ taskTitle, onComplete }) {
           ) : null}
 
           {error ? (
-            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+            <p className="rounded-xl bg-[#E85D3F]/10 px-4 py-3 text-sm text-[#E85D3F]">
               {error}
             </p>
           ) : null}
@@ -142,7 +147,7 @@ export default function AIBreakdown({ taskTitle, onComplete }) {
           {hasGenerated ? (
             <>
               {subtasks.length > 0 ? (
-                <ol className="space-y-2 pl-5 text-sm text-slate-700">
+                <ol className="space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
                   {subtasks.map((subtask, index) => (
                     <li key={`${subtask}-${index}`} className="list-decimal">
                       {subtask}
@@ -150,7 +155,7 @@ export default function AIBreakdown({ taskTitle, onComplete }) {
                   ))}
                 </ol>
               ) : (
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-[var(--text-secondary)]">
                   No subtasks generated. Try again.
                 </p>
               )}

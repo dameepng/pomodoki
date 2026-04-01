@@ -5,7 +5,7 @@ export default function MainLayout({ children }) {
   return (
     <TimerProvider>
       <Navbar />
-      <main className="min-h-screen bg-stone-100 pt-16 text-slate-900">
+      <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-200">
         {children}
       </main>
     </TimerProvider>

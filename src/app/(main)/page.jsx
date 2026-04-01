@@ -4,24 +4,21 @@ import Timer from "@/presentation/components/timer/Timer.jsx";
 import AmbientPlayer from "@/presentation/components/ambient/AmbientPlayer.jsx";
 import PixelPet from "@/presentation/components/pet/PixelPet.jsx";
 import TaskList from "@/presentation/components/tasks/TaskList.jsx";
-import Card from "@/presentation/components/ui/Card.jsx";
 import ErrorBoundary from "@/presentation/components/ui/ErrorBoundary.jsx";
 
 export default function MainPage() {
   return (
     <ErrorBoundary>
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-10">
-        <Card className="overflow-hidden">
+      <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 items-start">
+        <div className="flex flex-col gap-4">
           <Timer />
-        </Card>
-
-        <div className="flex justify-center">
           <PixelPet />
         </div>
 
-        <AmbientPlayer />
-
-        <TaskList />
+        <div className="flex flex-col gap-4">
+          <TaskList />
+          <AmbientPlayer />
+        </div>
       </div>
     </ErrorBoundary>
   );

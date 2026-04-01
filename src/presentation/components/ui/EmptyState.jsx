@@ -11,9 +11,9 @@ export default function EmptyState({
       <div className="text-5xl" aria-hidden="true">
         {icon}
       </div>
-      <h3 className="text-lg font-medium text-slate-700">{title}</h3>
+      <h3 className="text-lg font-medium text-[var(--text-primary)]">{title}</h3>
       {description ? (
-        <p className="max-w-sm text-sm text-slate-500">{description}</p>
+        <p className="max-w-sm text-sm text-[var(--text-secondary)]">{description}</p>
       ) : null}
       {action ? <div>{action}</div> : null}
     </div>

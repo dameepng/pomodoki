@@ -27,7 +27,7 @@ export default function StatsPage() {
           <p className="text-sm font-medium uppercase tracking-[0.35em] text-red-500">
             Progress
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-4xl font-semibold tracking-tight text-[var(--text-primary)] transition-colors">
             Statistics
           </h1>
         </div>
@@ -65,10 +65,10 @@ export default function StatsPage() {
 
         <section className="space-y-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] transition-colors">
               Focus Time Chart
             </h2>
-            <p className="text-sm text-slate-500">Daily Focus Time</p>
+            <p className="text-sm text-[var(--text-secondary)] transition-colors">Daily Focus Time</p>
           </div>
 
           <ProductivityChart dailyFocusTime={stats?.dailyFocusTime || []} />

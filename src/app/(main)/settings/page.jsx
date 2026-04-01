@@ -27,7 +27,7 @@ const AMBIENT_OPTIONS = [
 ];
 
 const SELECT_CLASS_NAME =
-  "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-200";
+  "w-full cursor-pointer rounded-xl border border-[var(--border-default)] bg-[var(--bg-input)] py-3 pl-4 pr-10 text-[var(--text-primary)] outline-none transition focus:border-[var(--border-subtle)] focus:ring-2 focus:ring-[var(--border-subtle)] bg-[right_1rem_center]";
 
 function mapSettingsToForm(settings) {
   return {
@@ -150,13 +150,13 @@ export default function SettingsPage() {
             <p className="text-sm font-medium uppercase tracking-[0.35em] text-red-500">
               Preferences
             </p>
-            <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
+            <h1 className="text-4xl font-semibold tracking-tight text-[var(--text-primary)] transition-colors">
               Settings
             </h1>
           </div>
 
           <Card>
-            <p className="text-sm text-slate-500">Loading settings...</p>
+            <p className="text-sm text-[var(--text-secondary)]">Loading settings...</p>
           </Card>
         </div>
       </ErrorBoundary>
@@ -170,7 +170,7 @@ export default function SettingsPage() {
           <p className="text-sm font-medium uppercase tracking-[0.35em] text-red-500">
             Preferences
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-4xl font-semibold tracking-tight text-[var(--text-primary)] transition-colors">
             Settings
           </h1>
         </div>
@@ -203,7 +203,7 @@ export default function SettingsPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-2">
-                <span className="block text-sm font-medium text-slate-700">
+                <span className="block text-sm font-medium text-[var(--text-secondary)]">
                   Pet Type
                 </span>
                 <select
@@ -220,7 +220,7 @@ export default function SettingsPage() {
               </label>
 
               <label className="space-y-2">
-                <span className="block text-sm font-medium text-slate-700">
+                <span className="block text-sm font-medium text-[var(--text-secondary)]">
                   Ambient Sound Default
                 </span>
                 <select

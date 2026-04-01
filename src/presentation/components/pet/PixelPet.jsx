@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+
+import { cn } from "@/lib/utils.js";
 import useTimer from "@/presentation/hooks/useTimer.js";
 import {
   getPetImagePath,
@@ -20,6 +22,12 @@ const FALLBACK_IMAGE = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
   "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect width='128' height='128' rx='24' fill='#f8fafc'/><text x='50%' y='52%' font-size='56' text-anchor='middle'>🐱</text></svg>",
 )}`;
 
+const MODE_COLORS = {
+  focus: "#E85D3F",
+  short_break: "#4ECCA3",
+  long_break: "#6C8EBF",
+};
+
 function getTodayDateString() {
   return new Date().toISOString().split("T")[0];
 }
@@ -33,8 +41,6 @@ function normalizeStreakData(stats) {
   return {
     currentStreak,
     longestStreak,
-    // The current stats API does not expose lastActiveDate yet, so we keep a
-    // safe fallback that still allows the pet to react to an active streak.
     lastActiveDate:
       stats?.lastActiveDate ?? (currentStreak > 0 ? getTodayDateString() : null),
   };
@@ -79,6 +85,12 @@ export default function PixelPet() {
   });
   const imagePath = getPetImagePath(PET_TYPE, petState).replace(".png", ".svg");
   const [imageSrc, setImageSrc] = useState(imagePath);
+  const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
+  const streakLabel =
+    streakData.currentStreak > 0
+      ? `🔥 ${streakData.currentStreak} day streak`
+      : "Keep your streak alive";
+  const xpPercent = Math.min((streakData.currentStreak + 1) / 5, 1) * 100;
 
   useEffect(() => {
     setImageSrc(imagePath);
@@ -149,20 +161,22 @@ export default function PixelPet() {
   }, [pomodoroCount]);
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-5 flex items-center gap-4 transition-colors duration-200">
+      {/* Pet image */}
       <div
-        className={`relative h-32 w-32 overflow-hidden rounded-2xl bg-white/70 shadow-md transition-opacity ${getAnimationClassName(
-          petState,
-        )} ${isFetchingStreak ? "opacity-80" : "opacity-100"}`}
+        className={cn(
+          "w-16 h-16 rounded-2xl overflow-hidden bg-[var(--bg-elevated)] flex-shrink-0 flex items-center justify-center transition-opacity",
+          getAnimationClassName(petState),
+          isFetchingStreak ? "opacity-80" : "opacity-100",
+        )}
       >
         <Image
           src={imageSrc}
           alt={`${PET_TYPE} is ${petState}`}
-          fill
-          sizes="128px"
+          width={128}
+          height={128}
           unoptimized={imageSrc.startsWith("data:")}
-          className="object-contain"
-          style={{ imageRendering: "pixelated" }}
+          className="h-12 w-12 object-contain [image-rendering:pixelated]"
           onError={() => {
             setImageSrc((currentSrc) =>
               currentSrc === FALLBACK_IMAGE ? currentSrc : FALLBACK_IMAGE,
@@ -171,10 +185,26 @@ export default function PixelPet() {
         />
       </div>
 
-      <PetStatus
-        petState={petState}
-        currentStreak={streakData.currentStreak}
-      />
+      {/* Pet info */}
+      <div className="flex flex-col gap-1 flex-1">
+        <p className="text-sm font-semibold text-[var(--text-primary)]">Pixel Pet</p>
+        <span className="text-xs text-orange-400 font-medium">
+          {streakLabel}
+        </span>
+
+        <PetStatus
+          petState={petState}
+          currentStreak={streakData.currentStreak}
+        />
+
+        {/* XP bar */}
+        <div className="h-1 w-full bg-[var(--bg-elevated)] rounded-full overflow-hidden mt-1">
+          <div
+            className="h-full rounded-full transition-all duration-700"
+            style={{ width: `${xpPercent}%`, backgroundColor: accentColor }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

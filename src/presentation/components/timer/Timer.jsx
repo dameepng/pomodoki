@@ -1,14 +1,21 @@
 "use client";
 
+import { cn } from "@/lib/utils.js";
 import useTimer from "@/presentation/hooks/useTimer.js";
 
 import TimerControls from "./TimerControls.jsx";
 import TimerProgress from "./TimerProgress.jsx";
 
-const MODE_LABELS = {
-  focus: "Focus Time",
-  short_break: "Short Break",
-  long_break: "Long Break",
+const MODE_OPTIONS = [
+  { value: "focus", label: "Focus" },
+  { value: "short_break", label: "Break" },
+  { value: "long_break", label: "Long Break" },
+];
+
+const MODE_COLORS = {
+  focus: "#E85D3F",
+  short_break: "#4ECCA3",
+  long_break: "#6C8EBF",
 };
 
 const DEFAULT_SETTINGS = {
@@ -30,41 +37,66 @@ const getTotalTimeByMode = (mode, settings) => {
 };
 
 export default function Timer() {
-  const { mode, timeLeft, pomodoroCount, settings } = useTimer();
+  const { mode, timeLeft, pomodoroCount, settings, setMode } = useTimer();
   const activeSettings = settings ?? DEFAULT_SETTINGS;
   const totalTime = getTotalTimeByMode(mode, activeSettings);
   const completedDots = pomodoroCount % 4;
+  const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
 
   return (
-    <section className="flex flex-col items-center gap-8 px-6 py-10">
-      <div className="space-y-2 text-center">
-        <p className="text-sm font-medium uppercase tracking-[0.3em] text-slate-500">
-          Pomodoki Timer
-        </p>
-        <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-          {MODE_LABELS[mode] || MODE_LABELS.focus}
-        </h2>
+    <section className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-6 flex flex-col items-center transition-colors duration-200">
+      {/* Mode tabs */}
+      <div className="flex w-full bg-[var(--bg-input)] rounded-xl p-1 gap-1 mb-6">
+        {MODE_OPTIONS.map((option) => {
+          const isActive = mode === option.value;
+
+          return (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setMode(option.value)}
+              className={cn(
+                "flex-1 py-2 text-xs font-semibold rounded-lg transition-colors text-center",
+                isActive
+                  ? "text-[var(--text-primary)] bg-[var(--bg-elevated)]"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]",
+              )}
+            >
+              {option.label}
+            </button>
+          );
+        })}
       </div>
 
+      {/* Timer ring + digits — this is the focal point */}
       <TimerProgress timeLeft={timeLeft} totalTime={totalTime} mode={mode} />
 
-      <div className="flex items-center justify-center gap-3">
+      {/* Session dots */}
+      <div className="flex gap-2 mt-5">
         {Array.from({ length: 4 }, (_, index) => {
           const isCompleted = index < completedDots;
 
           return (
             <span
               key={index}
-              className={`h-3 w-3 rounded-full border transition ${
-                isCompleted
-                  ? "border-slate-900 bg-slate-900"
-                  : "border-slate-300 bg-transparent"
-              }`}
+              className={cn(
+                "w-2 h-2 rounded-full transition-colors",
+                !isCompleted && "bg-[var(--bg-elevated)]",
+              )}
+              style={isCompleted ? { backgroundColor: accentColor } : undefined}
             />
           );
         })}
       </div>
 
+      {/* Session info */}
+      <p className="text-[11px] text-[var(--text-muted)] mt-2 mb-5">
+        {mode === "focus"
+          ? `Session ${completedDots + 1} of 4`
+          : "Take a break, you earned it"}
+      </p>
+
+      {/* Controls */}
       <TimerControls />
     </section>
   );

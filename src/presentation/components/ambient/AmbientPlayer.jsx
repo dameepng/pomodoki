@@ -1,8 +1,15 @@
 "use client";
 
 import useAmbient from "@/presentation/hooks/useAmbient.js";
+import useTimer from "@/presentation/hooks/useTimer.js";
 import SoundSelector from "./SoundSelector.jsx";
 import VolumeControl from "./VolumeControl.jsx";
+
+const MODE_COLORS = {
+  focus: "#E85D3F",
+  short_break: "#4ECCA3",
+  long_break: "#6C8EBF",
+};
 
 export default function AmbientPlayer() {
   const {
@@ -14,15 +21,20 @@ export default function AmbientPlayer() {
     resume,
     setVolume,
   } = useAmbient();
+  const { mode } = useTimer();
+  const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
 
   return (
-    <section className="flex flex-col gap-5 rounded-2xl bg-white p-6 shadow-md">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-900">
+    <section className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-6 transition-colors duration-200">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <p className="text-[10px] font-bold tracking-[3px] uppercase text-[var(--text-muted)]">
+            Ambient
+          </p>
+          <h2 className="text-xl font-bold tracking-tight text-[var(--text-primary)]">
             Ambient Sound
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[var(--text-secondary)]">
             Choose a background sound for your focus session.
           </p>
         </div>
@@ -38,26 +50,26 @@ export default function AmbientPlayer() {
 
             resume();
           }}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-            currentSound === "none"
-              ? "cursor-not-allowed bg-slate-100 text-slate-400"
-              : "bg-red-500 text-white hover:bg-red-600"
-          }`}
+          className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-muted)] bg-[var(--bg-elevated)] hover:text-[var(--text-secondary)] transition-colors border border-[var(--border-default)] w-full sm:w-auto disabled:opacity-50"
         >
-          {isPlaying ? "⏸ Pause" : "▶ Play"}
+          {isPlaying ? "Pause" : "Play"}
         </button>
       </div>
 
-      <SoundSelector
-        currentSound={currentSound}
-        onSelect={changeSound}
-        disabled={false}
-      />
+      <div className="flex flex-wrap gap-2 mt-4">
+        <SoundSelector
+          currentSound={currentSound}
+          onSelect={changeSound}
+          disabled={false}
+          accentColor={accentColor}
+        />
+      </div>
 
       <VolumeControl
         volume={volume}
         onVolumeChange={setVolume}
         disabled={currentSound === "none"}
+        accentColor={accentColor}
       />
     </section>
   );

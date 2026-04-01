@@ -1,13 +1,8 @@
-const joinClasses = (...classes) => classes.filter(Boolean).join(" ");
+import { cn } from "@/lib/utils.js";
 
 export default function Card({ children, className }) {
   return (
-    <div
-      className={joinClasses(
-        "rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200",
-        className,
-      )}
-    >
+    <div className={cn("bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-6 shadow-card transition-colors duration-200", className)}>
       {children}
     </div>
   );

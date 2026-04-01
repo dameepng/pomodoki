@@ -1,5 +1,7 @@
 "use client";
 
+import { formatDate } from "@/lib/utils";
+
 function formatDuration(seconds) {
   if (seconds < 60) {
     return `${seconds}s`;
@@ -15,18 +17,15 @@ function formatDuration(seconds) {
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
-function StatCard({ label, value, icon }) {
+function StatCard({ label, value, valueClass = "" }) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-md ring-1 ring-slate-200">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-medium text-slate-500">{label}</p>
-        <span className="text-xl" aria-hidden="true">
-          {icon}
-        </span>
-      </div>
-      <p className="text-2xl font-semibold tracking-tight text-slate-900">
+    <div className="flex flex-col rounded-2xl bg-[var(--bg-card)] p-5 shadow-card border border-[var(--border-default)] transition-colors duration-200">
+      <h3 className="text-sm font-medium text-[var(--text-secondary)] truncate">
+        {label}
+      </h3>
+      <div className={`mt-2 text-2xl font-bold tracking-tight text-[var(--text-primary)] truncate ${valueClass}`}>
         {value}
-      </p>
+      </div>
     </div>
   );
 }
@@ -37,10 +36,10 @@ function StatsSkeleton() {
       {Array.from({ length: 6 }).map((_, index) => (
         <div
           key={index}
-          className="rounded-2xl bg-white p-5 shadow-md ring-1 ring-slate-200"
+          className="flex flex-col rounded-2xl bg-[var(--bg-card)] p-5 shadow-card border border-[var(--border-default)]"
         >
-          <div className="mb-4 h-4 w-24 animate-pulse rounded bg-slate-200" />
-          <div className="h-8 w-28 animate-pulse rounded bg-slate-200" />
+          <div className="mb-3 h-4 w-24 animate-pulse rounded bg-[var(--bg-elevated)]" />
+          <div className="h-8 w-28 animate-pulse rounded bg-[var(--bg-elevated)]" />
         </div>
       ))}
     </div>
@@ -59,25 +58,22 @@ export default function StatsOverview({ stats }) {
       <StatCard
         label="Total Focus Time"
         value={formatDuration(stats.totalFocusTime || 0)}
-        icon="⏱️"
       />
-      <StatCard label="Pomodoros" value={focusSessions} icon="🍅" />
+      <StatCard label="Pomodoros" value={focusSessions} />
       <StatCard
         label="Current Streak"
-        value={`${stats.currentStreak || 0} 🔥`}
-        icon="🔥"
+        value={stats.currentStreak || 0}
       />
       <StatCard
         label="Longest Streak"
-        value={`${stats.longestStreak || 0} 🏆`}
-        icon="🏆"
+        value={stats.longestStreak || 0}
       />
       <StatCard
-        label="Most Productive Day"
-        value={stats.mostProductiveDay?.date || "No data yet"}
-        icon="📅"
+        label="Most Productive Date"
+        value={stats.mostProductiveDay?.date ? formatDate(stats.mostProductiveDay.date) : "No data"}
+        valueClass="text-lg"
       />
-      <StatCard label="Focus Sessions" value={focusSessions} icon="📈" />
+      <StatCard label="Focus Sessions" value={focusSessions} />
     </div>
   );
 }

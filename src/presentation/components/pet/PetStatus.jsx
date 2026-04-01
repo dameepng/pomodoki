@@ -1,12 +1,13 @@
 "use client";
 
 import { getPetMessage, PET_STATES } from "@/lib/pet-helpers.js";
+import { cn } from "@/lib/utils.js";
 
 const STATE_TEXT_COLORS = {
-  [PET_STATES.HAPPY]: "text-green-600",
-  [PET_STATES.NEUTRAL]: "text-slate-500",
-  [PET_STATES.SAD]: "text-sky-400",
-  [PET_STATES.SLEEPING]: "text-violet-400",
+  [PET_STATES.HAPPY]: "text-[#4ECCA3]",
+  [PET_STATES.NEUTRAL]: "text-gray-400",
+  [PET_STATES.SAD]: "text-[#6C8EBF]",
+  [PET_STATES.SLEEPING]: "text-gray-500",
 };
 
 export default function PetStatus({ petState, currentStreak }) {
@@ -15,7 +16,12 @@ export default function PetStatus({ petState, currentStreak }) {
     STATE_TEXT_COLORS[petState] ?? STATE_TEXT_COLORS[PET_STATES.NEUTRAL];
 
   return (
-    <p className={`text-center text-sm italic ${textColorClassName}`}>
+    <p
+      className={cn(
+        "text-xs leading-5",
+        textColorClassName,
+      )}
+    >
       {message}
     </p>
   );

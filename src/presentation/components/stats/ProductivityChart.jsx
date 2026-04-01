@@ -1,6 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
+import {
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  CartesianGrid,
+} from "recharts";
 
 function formatDuration(seconds) {
   if (seconds < 60) {
@@ -27,65 +35,91 @@ function getDateLabel(dateString) {
   return date.toLocaleDateString("en-US", { day: "2-digit" });
 }
 
+// Custom minimal tooltip matching Shadcn UI aesthetics
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 shadow-xl">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">
+          {data.date}
+        </p>
+        <div className="flex items-center gap-2">
+          <div className="h-2.5 w-2.5 rounded-[2px] bg-[#E85D3F]" />
+          <p className="text-sm font-medium text-[var(--text-primary)]">
+            {formatDuration(data.totalDuration)}
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function ProductivityChart({ dailyFocusTime }) {
-  const [activeLabel, setActiveLabel] = useState(null);
   const dataPoints = Array.isArray(dailyFocusTime)
     ? dailyFocusTime.slice(-7)
     : [];
 
-  if (dataPoints.length === 0) {
+  const chartData = useMemo(() => {
+    return dataPoints.map((point) => ({
+      ...point,
+      displayDate: getDateLabel(point.date),
+    }));
+  }, [dataPoints]);
+
+  if (chartData.length === 0) {
     return (
-      <div className="rounded-2xl bg-white p-6 text-sm text-slate-500 shadow-md ring-1 ring-slate-200">
+      <div className="rounded-2xl bg-[var(--bg-card)] p-6 text-sm text-[var(--text-secondary)] shadow-card border border-[var(--border-default)]">
         No data for this period
       </div>
     );
   }
 
-  const maxDuration = Math.max(
-    ...dataPoints.map((item) => Number(item.totalDuration || 0)),
-    1,
-  );
-  const fallbackPoint = dataPoints[dataPoints.length - 1];
-  const summaryLabel =
-    activeLabel ||
-    `${fallbackPoint.date} • ${formatDuration(
-      Number(fallbackPoint.totalDuration || 0),
-    )}`;
+  const fallbackPoint = chartData[chartData.length - 1];
+  const summaryLabel = `${fallbackPoint.date} • ${formatDuration(
+    Number(fallbackPoint.totalDuration || 0),
+  )}`;
 
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-900">
-            Productivity Trend
-          </h3>
-          <p className="text-sm text-slate-500">{summaryLabel}</p>
-        </div>
+    <div className="rounded-2xl bg-[var(--bg-card)] p-6 shadow-card border border-[var(--border-default)] transition-colors duration-200">
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] transition-colors">
+          Productivity Trend
+        </h3>
+        <p className="text-sm text-[var(--text-secondary)] transition-colors">
+          {summaryLabel}
+        </p>
       </div>
 
-      <div className="flex h-56 items-end gap-3">
-        {dataPoints.map((item) => {
-          const totalDuration = Number(item.totalDuration || 0);
-          const barHeight = Math.max((totalDuration / maxDuration) * 100, 4);
-          const tooltip = `${item.date} • ${formatDuration(totalDuration)}`;
-
-          return (
-            <div key={item.date} className="flex flex-1 flex-col items-center gap-2">
-              <div className="flex h-44 w-full items-end">
-                <div
-                  title={tooltip}
-                  onMouseEnter={() => setActiveLabel(tooltip)}
-                  onMouseLeave={() => setActiveLabel(null)}
-                  className="w-full rounded-t-xl bg-red-500 transition-opacity hover:opacity-85"
-                  style={{ height: `${barHeight}%`, minHeight: "4px" }}
-                />
-              </div>
-              <span className="text-xs font-medium text-slate-500">
-                {getDateLabel(item.date)}
-              </span>
-            </div>
-          );
-        })}
+      <div className="h-[220px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+          >
+            <CartesianGrid vertical={false} stroke="var(--border-default)" strokeDasharray="3 3" />
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{ fill: "var(--bg-elevated)", opacity: 0.5 }}
+            />
+            <XAxis
+              dataKey="displayDate"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={12}
+              fontSize={12}
+              stroke="var(--text-muted)"
+            />
+            <Bar
+              dataKey="totalDuration"
+              fill="#E85D3F"
+              radius={[6, 6, 0, 0]}
+              maxBarSize={48}
+              activeBar={{ fill: "#d4512f" }}
+            />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
