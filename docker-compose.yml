@@ -1,10 +1,9 @@
-version: "3.8"
-
 services:
   app:
     build: .
-    ports:
-      - "3000:3000"
+    restart: unless-stopped
+    expose:
+      - "3000"
     environment:
       - DATABASE_URL=postgres://pomodoro:${DB_PASSWORD}@db:5432/pomodoro
       - JWT_SECRET=${JWT_SECRET}
@@ -16,8 +15,9 @@ services:
 
   db:
     image: postgres:16-alpine
-    ports:
-      - "54325:5432"
+    restart: unless-stopped
+    expose:
+      - "5432"
     environment:
       - POSTGRES_DB=pomodoro
       - POSTGRES_USER=pomodoro
@@ -32,8 +32,9 @@ services:
 
   nginx:
     image: nginx:alpine
+    restart: unless-stopped
     ports:
-      - "80:80"
+      - "${WEB_HOST_PORT:-8080}:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
