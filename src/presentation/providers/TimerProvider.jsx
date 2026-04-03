@@ -8,13 +8,9 @@ import {
   useState,
 } from "react";
 
-export const TimerContext = createContext(null);
+import { DEFAULT_SETTINGS } from "@/core/entities/settings.entity.js";
 
-const DEFAULT_SETTINGS = {
-  focusDuration: 1500,
-  shortBreakDuration: 300,
-  longBreakDuration: 900,
-};
+export const TimerContext = createContext(null);
 
 const getDurationByMode = (mode, settings) => {
   if (mode === "short_break") {
@@ -50,48 +46,45 @@ function showNotification(title, body) {
   new Notification(title, { body, icon: "/favicon.ico" });
 }
 
-function playCompletionSound() {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  const AudioContextClass =
-    window.AudioContext || window.webkitAudioContext;
-
-  if (!AudioContextClass) {
-    return;
-  }
-
-  const audioContext = new AudioContextClass();
-  const oscillator = audioContext.createOscillator();
-  const gainNode = audioContext.createGain();
-
-  oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
-  oscillator.type = "sine";
-  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioContext.destination);
-
-  oscillator.onended = () => {
-    oscillator.disconnect();
-    gainNode.disconnect();
-    audioContext.close();
-  };
-
-  oscillator.start();
-  oscillator.stop(audioContext.currentTime + 0.3);
-}
-
 export default function TimerProvider({ children }) {
   const [mode, setModeState] = useState("focus");
-  const [timeLeft, setTimeLeft] = useState(1500);
+  const [timeLeft, setTimeLeft] = useState(DEFAULT_SETTINGS.focusDuration);
   const [isRunning, setIsRunning] = useState(false);
   const [pomodoroCount, setPomodoroCount] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState(null);
-  const [settings, setSettings] = useState(null);
+  const [sessionCompletionCount, setSessionCompletionCount] = useState(0);
+  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [isLoadingSettings, setIsLoadingSettings] = useState(true);
   const intervalRef = useRef(null);
+  const isRunningRef = useRef(false);
+  const modeRef = useRef("focus");
+
+  const updateSettings = useCallback(
+    (nextSettings, options = {}) => {
+      const { resetTimeLeft = true } = options;
+      const mergedSettings = {
+        ...DEFAULT_SETTINGS,
+        ...nextSettings,
+      };
+
+      setSettings(mergedSettings);
+
+      if (!isRunningRef.current && resetTimeLeft) {
+        setTimeLeft(getDurationByMode(modeRef.current, mergedSettings));
+      }
+
+      return mergedSettings;
+    },
+    [],
+  );
+
+  useEffect(() => {
+    isRunningRef.current = isRunning;
+  }, [isRunning]);
+
+  useEffect(() => {
+    modeRef.current = mode;
+  }, [mode]);
 
   useEffect(() => {
     let isMounted = true;
@@ -108,13 +101,7 @@ export default function TimerProvider({ children }) {
 
         if (response.ok) {
           const data = await response.json();
-          const nextSettings = {
-            ...DEFAULT_SETTINGS,
-            ...data.settings,
-          };
-
-          setSettings(nextSettings);
-          setTimeLeft(nextSettings.focusDuration);
+          updateSettings(data.settings, { resetTimeLeft: true });
           return;
         }
       } catch {
@@ -124,8 +111,7 @@ export default function TimerProvider({ children }) {
         return;
       }
 
-      setSettings(DEFAULT_SETTINGS);
-      setTimeLeft(DEFAULT_SETTINGS.focusDuration);
+      updateSettings(DEFAULT_SETTINGS, { resetTimeLeft: true });
     };
 
     void requestNotificationPermission();
@@ -138,7 +124,7 @@ export default function TimerProvider({ children }) {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [updateSettings]);
 
   useEffect(() => {
     if (!isRunning) {
@@ -162,7 +148,7 @@ export default function TimerProvider({ children }) {
     };
   }, [isRunning]);
 
-  const handleSessionComplete = useCallback(async () => {
+  const handleSessionComplete = useCallback(async (reason = "timeout") => {
     const activeSettings = settings ?? DEFAULT_SETTINGS;
     const duration = getDurationByMode(mode, activeSettings);
 
@@ -183,9 +169,8 @@ export default function TimerProvider({ children }) {
     } catch {
     }
 
-    try {
-      playCompletionSound();
-    } catch {
+    if (reason === "timeout") {
+      setSessionCompletionCount((currentCount) => currentCount + 1);
     }
 
     if (mode === "focus") {
@@ -250,7 +235,7 @@ export default function TimerProvider({ children }) {
   }, [mode, settings]);
 
   const skip = useCallback(() => {
-    handleSessionComplete();
+    void handleSessionComplete("skip");
   }, [handleSessionComplete]);
 
   const setMode = useCallback(
@@ -272,8 +257,10 @@ export default function TimerProvider({ children }) {
         isRunning,
         pomodoroCount,
         currentTaskId,
+        sessionCompletionCount,
         settings,
         isLoadingSettings,
+        updateSettings,
         start,
         pause,
         reset,

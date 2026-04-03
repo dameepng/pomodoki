@@ -1,6 +1,7 @@
 "use client";
 
 import Timer from "@/presentation/components/timer/Timer.jsx";
+import TimeoutSoundPanel from "@/presentation/components/timer/TimeoutSoundPanel.jsx";
 import AmbientPlayer from "@/presentation/components/ambient/AmbientPlayer.jsx";
 import PixelPet from "@/presentation/components/pet/PixelPet.jsx";
 import TaskList from "@/presentation/components/tasks/TaskList.jsx";
@@ -12,6 +13,7 @@ export default function MainPage() {
       <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 items-start">
         <div className="flex flex-col gap-4">
           <Timer />
+          <TimeoutSoundPanel />
           <PixelPet />
         </div>
 

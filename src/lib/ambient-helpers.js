@@ -5,6 +5,7 @@ export const AMBIENT_SOUNDS = [
   { id: "forest", label: "Forest", emoji: "🌿" },
   { id: "ocean", label: "Ocean", emoji: "🌊" },
   { id: "fireplace", label: "Fireplace", emoji: "🔥" },
+  { id: "mozart", label: "Mozart", emoji: "🎼" },
   { id: "none", label: "None", emoji: "🔇" },
 ];
 

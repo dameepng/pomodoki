@@ -169,3 +169,32 @@
     transform: scale(1) translateY(0);
   }
 }
+
+@keyframes timerCountdownPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes timerCountdownGlow {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.timer-countdown-ring {
+  animation: timerCountdownPulse 1s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.timer-countdown-text {
+  animation: timerCountdownGlow 1s ease-in-out infinite;
+}

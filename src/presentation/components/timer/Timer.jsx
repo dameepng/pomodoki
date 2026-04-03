@@ -37,7 +37,8 @@ const getTotalTimeByMode = (mode, settings) => {
 };
 
 export default function Timer() {
-  const { mode, timeLeft, pomodoroCount, settings, setMode } = useTimer();
+  const { mode, timeLeft, isRunning, pomodoroCount, settings, setMode } =
+    useTimer();
   const activeSettings = settings ?? DEFAULT_SETTINGS;
   const totalTime = getTotalTimeByMode(mode, activeSettings);
   const completedDots = pomodoroCount % 4;
@@ -69,7 +70,12 @@ export default function Timer() {
       </div>
 
       {/* Timer ring + digits — this is the focal point */}
-      <TimerProgress timeLeft={timeLeft} totalTime={totalTime} mode={mode} />
+      <TimerProgress
+        timeLeft={timeLeft}
+        totalTime={totalTime}
+        mode={mode}
+        isRunning={isRunning}
+      />
 
       {/* Session dots */}
       <div className="flex gap-2 mt-5">

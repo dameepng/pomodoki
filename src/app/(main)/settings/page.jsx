@@ -6,6 +6,7 @@ import Card from "@/presentation/components/ui/Card.jsx";
 import ErrorBoundary from "@/presentation/components/ui/ErrorBoundary.jsx";
 import Input from "@/presentation/components/ui/Input.jsx";
 import { useToast } from "@/presentation/components/ui/Toast.jsx";
+import useTimer from "@/presentation/hooks/useTimer.js";
 
 const DEFAULT_FORM_SETTINGS = {
   focusDuration: "25",
@@ -23,6 +24,7 @@ const AMBIENT_OPTIONS = [
   "forest",
   "ocean",
   "fireplace",
+  "mozart",
   "none",
 ];
 
@@ -49,6 +51,7 @@ async function parseJsonResponse(response) {
 
 export default function SettingsPage() {
   const { addToast } = useToast();
+  const { updateSettings } = useTimer();
   const [settings, setSettings] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -131,6 +134,7 @@ export default function SettingsPage() {
       }
 
       setSettings(mapSettingsToForm(data.settings));
+      updateSettings(data.settings);
       addToast({ message: "Settings saved!", type: "success" });
     } catch (saveError) {
       addToast({

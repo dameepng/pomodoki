@@ -9,6 +9,7 @@ const AMBIENT_SOUNDS = [
   "forest",
   "ocean",
   "fireplace",
+  "mozart",
   "none",
 ];
 
@@ -58,7 +59,7 @@ export class UpdateSettingsUseCase {
       !AMBIENT_SOUNDS.includes(data.ambientSound)
     ) {
       throw new ValidationError(
-        "ambientSound harus salah satu dari: rain, brown_noise, coffee_shop, forest, ocean, fireplace, none",
+        "ambientSound harus salah satu dari: rain, brown_noise, coffee_shop, forest, ocean, fireplace, mozart, none",
       );
     }
 

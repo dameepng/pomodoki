@@ -7,6 +7,12 @@ export const PET_STATES = {
   SLEEPING: "sleeping",
 };
 
+const PET_ASSET_STATE_OVERRIDES = {
+  dog: {
+    sleeping: "sleep",
+  },
+};
+
 const BREAK_MODES = ["short_break", "long_break"];
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -61,8 +67,10 @@ export function getPetImagePath(petType, petState) {
   const safePetState = Object.values(PET_STATES).includes(petState)
     ? petState
     : PET_STATES.NEUTRAL;
+  const assetPetState =
+    PET_ASSET_STATE_OVERRIDES[safePetType]?.[safePetState] ?? safePetState;
 
-  return `/pets/${safePetType}-${safePetState}.png`;
+  return `/pets/${safePetType}-${assetPetState}.png`;
 }
 
 export function getPetMessage(petState, currentStreak) {

@@ -8,24 +8,28 @@ import useTimer from "@/presentation/hooks/useTimer.js";
 import {
   getPetImagePath,
   getPetState,
+  PET_TYPES,
   PET_STATES,
 } from "@/lib/pet-helpers.js";
 import PetStatus from "./PetStatus.jsx";
 
-const PET_TYPE = "cat";
 const DEFAULT_STREAK_DATA = {
   currentStreak: 0,
   longestStreak: 0,
   lastActiveDate: null,
 };
-const FALLBACK_IMAGE = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect width='128' height='128' rx='24' fill='#f8fafc'/><text x='50%' y='52%' font-size='56' text-anchor='middle'>🐱</text></svg>",
-)}`;
 
 const MODE_COLORS = {
   focus: "#E85D3F",
   short_break: "#4ECCA3",
   long_break: "#6C8EBF",
+};
+
+const PET_FALLBACK_EMOJIS = {
+  cat: "🐱",
+  dog: "🐶",
+  bird: "🐦",
+  plant: "🪴",
 };
 
 function getTodayDateString() {
@@ -73,17 +77,27 @@ function getAnimationClassName(petState) {
   return "";
 }
 
+function getFallbackImage(petType) {
+  const fallbackEmoji = PET_FALLBACK_EMOJIS[petType] ?? PET_FALLBACK_EMOJIS.cat;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect width='128' height='128' rx='24' fill='#f8fafc'/><text x='50%' y='52%' font-size='56' text-anchor='middle'>${fallbackEmoji}</text></svg>`,
+  )}`;
+}
+
 export default function PixelPet() {
-  const { isRunning, mode, pomodoroCount } = useTimer();
+  const { isRunning, mode, pomodoroCount, settings } = useTimer();
   const [streakData, setStreakData] = useState(DEFAULT_STREAK_DATA);
   const [isFetchingStreak, setIsFetchingStreak] = useState(true);
+  const petType = PET_TYPES.includes(settings?.petType) ? settings.petType : "cat";
   const petState = getPetState({
     currentStreak: streakData.currentStreak,
     lastActiveDate: streakData.lastActiveDate,
     isRunning,
     mode,
   });
-  const imagePath = getPetImagePath(PET_TYPE, petState).replace(".png", ".svg");
+  const imagePath = getPetImagePath(petType, petState).replace(".png", ".svg");
+  const fallbackImage = getFallbackImage(petType);
   const [imageSrc, setImageSrc] = useState(imagePath);
   const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
   const streakLabel =
@@ -172,14 +186,14 @@ export default function PixelPet() {
       >
         <Image
           src={imageSrc}
-          alt={`${PET_TYPE} is ${petState}`}
+          alt={`${petType} is ${petState}`}
           width={128}
           height={128}
           unoptimized={imageSrc.startsWith("data:")}
           className="h-12 w-12 object-contain [image-rendering:pixelated]"
           onError={() => {
             setImageSrc((currentSrc) =>
-              currentSrc === FALLBACK_IMAGE ? currentSrc : FALLBACK_IMAGE,
+              currentSrc === fallbackImage ? currentSrc : fallbackImage,
             );
           }}
         />

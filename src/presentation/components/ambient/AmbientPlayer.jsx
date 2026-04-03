@@ -12,6 +12,7 @@ const MODE_COLORS = {
 };
 
 export default function AmbientPlayer() {
+  const { mode, settings } = useTimer();
   const {
     currentSound,
     volume,
@@ -20,8 +21,7 @@ export default function AmbientPlayer() {
     pause,
     resume,
     setVolume,
-  } = useAmbient();
-  const { mode } = useTimer();
+  } = useAmbient(settings?.ambientSound ?? "rain");
   const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
 
   return (

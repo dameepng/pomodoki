@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getAudioPath } from "@/lib/ambient-helpers.js";
 
-export default function useAmbient() {
-  const [currentSound, setCurrentSound] = useState("none");
+export default function useAmbient(defaultSound = "none") {
+  const normalizedDefaultSound = defaultSound || "none";
+  const [currentSound, setCurrentSound] = useState(normalizedDefaultSound);
   const [volume, setVolumeState] = useState(0.5);
   const [isPlaying, setIsPlaying] = useState(false);
   const howlRef = useRef(null);
@@ -88,6 +89,12 @@ export default function useAmbient() {
     },
     [play, stop],
   );
+
+  useEffect(() => {
+    stopCurrent();
+    setCurrentSound(normalizedDefaultSound);
+    setIsPlaying(false);
+  }, [normalizedDefaultSound, stopCurrent]);
 
   useEffect(() => {
     return () => {
