@@ -20,11 +20,11 @@ export default function TimerControls() {
   const glowShadow = MODE_SHADOWS[mode] || MODE_SHADOWS.focus;
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-3">
+    <div className="grid w-full max-w-sm grid-cols-2 gap-3 sm:max-w-none sm:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)_minmax(0,1fr)]">
       <button
         type="button"
         onClick={isRunning ? pause : start}
-        className="px-12 py-3.5 rounded-full font-semibold text-sm text-white transition-all hover:-translate-y-0.5 active:translate-y-0"
+        className="col-span-2 inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 active:translate-y-0 sm:col-span-1 sm:px-8"
         style={{
           backgroundColor: accentColor,
           boxShadow: glowShadow,
@@ -36,7 +36,7 @@ export default function TimerControls() {
       <button
         type="button"
         onClick={reset}
-        className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-muted)] bg-[var(--bg-elevated)] hover:text-[var(--text-secondary)] transition-colors border border-[var(--border-default)]"
+        className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-default)] bg-[var(--bg-elevated)] px-4 py-2.5 text-sm font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
       >
         Reset
       </button>
@@ -44,7 +44,7 @@ export default function TimerControls() {
       <button
         type="button"
         onClick={skip}
-        className="px-5 py-2.5 rounded-full text-sm font-medium text-[var(--text-muted)] bg-[var(--bg-elevated)] hover:text-[var(--text-secondary)] transition-colors border border-[var(--border-default)]"
+        className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-default)] bg-[var(--bg-elevated)] px-4 py-2.5 text-sm font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text-secondary)]"
       >
         Skip
       </button>
