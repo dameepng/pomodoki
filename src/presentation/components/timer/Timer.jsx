@@ -45,9 +45,9 @@ export default function Timer() {
   const accentColor = MODE_COLORS[mode] || MODE_COLORS.focus;
 
   return (
-    <section className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)] p-6 flex flex-col items-center transition-colors duration-200">
+    <section className="flex w-full flex-col items-center rounded-2xl border border-[var(--border-default)] bg-[var(--bg-card)] p-4 transition-colors duration-200 sm:p-5 lg:p-6">
       {/* Mode tabs */}
-      <div className="flex w-full bg-[var(--bg-input)] rounded-xl p-1 gap-1 mb-6">
+      <div className="mb-5 flex w-full gap-1 rounded-xl bg-[var(--bg-input)] p-1 sm:mb-6">
         {MODE_OPTIONS.map((option) => {
           const isActive = mode === option.value;
 
@@ -57,7 +57,7 @@ export default function Timer() {
               type="button"
               onClick={() => setMode(option.value)}
               className={cn(
-                "flex-1 py-2 text-xs font-semibold rounded-lg transition-colors text-center",
+                "flex-1 rounded-lg px-2 py-2.5 text-center text-[11px] font-semibold transition-colors sm:px-3 sm:text-xs",
                 isActive
                   ? "text-[var(--text-primary)] bg-[var(--bg-elevated)]"
                   : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]",
@@ -78,7 +78,7 @@ export default function Timer() {
       />
 
       {/* Session dots */}
-      <div className="flex gap-2 mt-5">
+      <div className="mt-4 flex gap-2 sm:mt-5">
         {Array.from({ length: 4 }, (_, index) => {
           const isCompleted = index < completedDots;
 
@@ -96,7 +96,7 @@ export default function Timer() {
       </div>
 
       {/* Session info */}
-      <p className="text-[11px] text-[var(--text-muted)] mt-2 mb-5">
+      <p className="mb-4 mt-2 text-center text-[11px] text-[var(--text-muted)] sm:mb-5">
         {mode === "focus"
           ? `Session ${completedDots + 1} of 4`
           : "Take a break, you earned it"}

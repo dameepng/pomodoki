@@ -50,16 +50,15 @@ export default function TimerProgress({
 
   return (
     <div
-      className={`relative flex items-center justify-center ${
+      className={`relative mx-auto flex aspect-square w-full max-w-[260px] items-center justify-center ${
         isCritical ? "timer-countdown-ring" : ""
       }`}
-      style={{ width: svgSize, height: svgSize }}
     >
       <svg
-        width={svgSize}
-        height={svgSize}
+        width="100%"
+        height="100%"
         viewBox={`0 0 ${svgSize} ${svgSize}`}
-        className="-rotate-90"
+        className="h-full w-full -rotate-90"
         aria-hidden="true"
       >
         <circle
@@ -90,17 +89,17 @@ export default function TimerProgress({
 
       <div className="absolute inset-0 flex items-center justify-center">
         <div
-          className="flex flex-col items-center text-center"
+          className="flex flex-col items-center px-3 text-center"
           style={{
             transform: `scale(${0.96 + progressRatio * 0.04})`,
             transition: "transform 1000ms linear",
           }}
         >
-          <span className="text-[10px] font-bold tracking-[3px] uppercase text-[var(--text-muted)] mb-3">
+          <span className="mb-2 text-[9px] font-bold uppercase tracking-[0.28em] text-[var(--text-muted)] sm:mb-3 sm:text-[10px] sm:tracking-[3px]">
             {MODE_BADGES[mode] || MODE_BADGES.focus}
           </span>
           <span
-            className={`font-mono text-[56px] font-medium leading-none tracking-tight ${
+            className={`font-mono text-[clamp(2.75rem,14vw,3.5rem)] font-medium leading-none tracking-tight sm:text-[56px] ${
               isCritical ? "timer-countdown-text" : ""
             }`}
             style={{ color: strokeColor }}
