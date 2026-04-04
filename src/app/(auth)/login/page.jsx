@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import PasswordField from "@/presentation/components/auth/PasswordField.jsx";
+
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -69,23 +71,13 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="space-y-2">
-            <label
-              className="text-sm font-medium text-[var(--text-secondary)]"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-input)] px-4 py-3 text-[var(--text-primary)] outline-none transition focus:border-[var(--border-subtle)] focus:ring-2 focus:ring-[var(--border-subtle)]"
-              placeholder="Masukkan password"
-              autoComplete="current-password"
-            />
-          </div>
+          <PasswordField
+            id="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="Masukkan password"
+            autoComplete="current-password"
+          />
 
           {error ? (
             <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-600">
