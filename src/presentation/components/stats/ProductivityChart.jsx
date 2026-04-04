@@ -57,16 +57,16 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 export default function ProductivityChart({ dailyFocusTime }) {
-  const dataPoints = Array.isArray(dailyFocusTime)
-    ? dailyFocusTime.slice(-7)
-    : [];
-
   const chartData = useMemo(() => {
+    const dataPoints = Array.isArray(dailyFocusTime)
+      ? dailyFocusTime.slice(-7)
+      : [];
+
     return dataPoints.map((point) => ({
       ...point,
       displayDate: getDateLabel(point.date),
     }));
-  }, [dataPoints]);
+  }, [dailyFocusTime]);
 
   if (chartData.length === 0) {
     return (
@@ -82,7 +82,7 @@ export default function ProductivityChart({ dailyFocusTime }) {
   )}`;
 
   return (
-    <div className="rounded-2xl bg-[var(--bg-card)] p-6 shadow-card border border-[var(--border-default)] transition-colors duration-200">
+    <div className="min-w-0 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-card)] p-6 shadow-card transition-colors duration-200">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-[var(--text-primary)] transition-colors">
           Productivity Trend
@@ -92,8 +92,15 @@ export default function ProductivityChart({ dailyFocusTime }) {
         </p>
       </div>
 
-      <div className="h-[220px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-[220px] min-w-0 w-full sm:h-[240px]">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={0}
+          minHeight={220}
+          debounce={50}
+          initialDimension={{ width: 520, height: 220 }}
+        >
           <BarChart
             data={chartData}
             margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
