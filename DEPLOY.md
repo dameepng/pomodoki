@@ -19,6 +19,23 @@ curl -I https://pomodoki.toeanmuda.id
 
 Kalau hasil `curl` menunjukkan `307` ke `/login` atau `200`, berarti app normal.
 
+## One Command
+
+Kalau mau lebih singkat, setelah repo terbaru ter-pull ke VPS kamu bisa langsung jalankan:
+
+```bash
+bash scripts/deploy-vps.sh
+```
+
+Script ini akan:
+
+- `git fetch`
+- `git pull --ff-only`
+- `docker compose build app`
+- `docker compose up -d --force-recreate app nginx`
+- tampilkan status container
+- cek URL app dari `.env`
+
 ## Cek Commit Terakhir
 
 ```bash
